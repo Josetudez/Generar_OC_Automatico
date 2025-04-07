@@ -96,6 +96,7 @@ def main():
         session.findById("wnd[0]").sendVKey(0)
         grupos = data_prueba.groupby(['reserva_centro','Cod_Proveedor'])
         scroll = 1
+        fecha = (datetime.datetime.now() + datetime.timedelta(days=5)).strftime('%d.%m.%Y')
 
         for (centro, proveedor), pedidos_grupo in grupos:
 
@@ -117,14 +118,14 @@ def main():
                 for i, row in pedidos_grupo.iterrows():
 
                     ventana_actual = "0013" if i == 0 else "0010"
-                    indice = i #"0" if i == 0 else "1"
+                    indice = "0" if i == 0 else "1"
                     #scroll = 1 if i <= 1 else scroll +1
                      
                     path_base = f"wnd[0]/usr/subSUB0:SAPLMEGUI:{ventana_actual}/subSUB2:SAPLMEVIEWS:1100/subSUB2:SAPLMEVIEWS:1200/subSUB1:SAPLMEGUI:1211/tblSAPLMEGUITC_1211"
                     
                     session.findById(f"{path_base}/ctxtMEPO1211-EMATN[4,{indice}]").text = row['material']
                     session.findById(f"{path_base}/txtMEPO1211-MENGE[6,{indice}]").text = row['q_pendiente']
-                    session.findById(f"{path_base}/ctxtMEPO1211-EEIND[9,{indice}]").text = (datetime.datetime.now() + datetime.timedelta(days=5)).strftime('%d.%m.%Y')
+                    session.findById(f"{path_base}/ctxtMEPO1211-EEIND[9,{indice}]").text = '15.04.2025'
                     session.findById(f"{path_base}/txtMEPO1211-NETPR[10,{indice}]").text = row['Precio Unitario']
                     session.findById(f"{path_base}/ctxtMEPO1211-NAME1[14,{indice}]").text = row['reserva_centro']
                     session.findById(f"{path_base}/ctxtMEPO1211-LGOBE[15,{indice}]").text = "0002"
@@ -142,3 +143,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
